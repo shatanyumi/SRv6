@@ -137,7 +137,7 @@ echo_g "Check above interface"
 
 echo_y "Connect vCPEB-G memif socket to memif11_vcpeb_vrouterb.sock"
 echo_g "${ctl_cpe_b} create memif socket id 11 filename /run/vpp/memif11_vcpeb_vrouterb.sock"
-$ctl_cpe_b create memif socket id 11 filename /run/vpp/memif11_vcpeb_vrouterb.sock
+#$ctl_cpe_b create memif socket id 11 filename /run/vpp/memif11_vcpeb_vrouterb.sock
 ls /run/vpp
 
 echo_y "${ctl_cpe_b} create interface memif id 2 socket-id 11 slave"
@@ -149,3 +149,114 @@ $ctl_cpe_b set interface name memif11/2 G
 $ctl_cpe_b show int
 
 echo_r "==== All vRouter start done! ===="
+
+# ===========================
+# config ip 
+# ===========================
+echo_r "==== Config vRouters IP ===="
+
+# --------------------------
+# vRouterA
+# --------------------------
+echo_g "---- Config vRouterA ----"
+echo_g "set G0 interface"
+echo_y "${ctl_A} set int state G0 up"
+$ctl_A set int state G0 up
+echo_y "${ctl_A} set int ip address G0 fdab::1/96"
+$ctl_A set int ip address G0 fdab::1/96
+
+echo_g "set route rules"
+echo_y "${ctl_A} ip route add ::/0 via fdab::2"
+$ctl_A ip route add ::/0 via fdab::2
+$ctl_A show int address 
+
+echo_g "set G1 interface"
+echo_y "${ctl_A} set int state G1 up"
+$ctl_A set int state G1 up
+echo_y "${ctl_A} set int ip address G1 10.10.10.1/24"
+$ctl_A set int ip address G1 10.10.10.1/24
+$ctl_A show int address
+
+echo_g "add loopback interface"
+echo_y "${ctl_A} loopback create-interface"
+$ctl_A loopback create-interface
+echo_y "${ctl_A} set interface state loop0 up"
+$ctl_A set interface state loop0 up
+echo_y "${ctl_A} set interface ip address loop0 fc10::1/96"
+$ctl_A set interface ip address loop0 fc10::1/96
+$ctl_A show int address
+
+# --------------------------
+# vRouterB
+# --------------------------
+echo_g "---- Config vRouterB ----"
+echo_g "set G0 interface"
+echo_y "${ctl_B} set int state G0 up"
+$ctl_B set int state G0 up
+echo_y "${ctl_B} set int ip address G0 fdab::2/96"
+$ctl_B set int ip address G0 fdab::2/96
+$ctl_B show int address
+
+echo_g "set G1 interface"
+echo_y "${ctl_B} set int state G1 up"
+${ctl_B} set int state G1 up
+echo_y "${ctl_B} set int ip address G1 10.10.1.1/24"
+$ctl_B set int ip address G1 10.10.1.1/24
+$ctl_B show int address
+
+echo_g "add loopback interface"
+echo_y "${ctl_B} loopback create-interface"
+${ctl_B} loopback create-interface
+echo_y "${ctl_B} set interface state loop0 up"
+$ctl_B set interface state loop0 up
+echo_y "${ctl_B} set interface ip address loop0 fc01::1/96"
+$ctl_B set interface ip address loop0 fc01::1/96
+$ctl_B show int address
+
+
+# --------------------------
+# vCPEA
+# --------------------------
+echo_g "---- Config vCPEA ----"
+
+echo_y "${ctl_cpe_a} set int state G up"
+$ctl_cpe_a set int state G up
+$ctl_cpe_a show int
+echo_y "${ctl_cpe_a} set int ip address G 10.10.10.2/24"
+$ctl_cpe_a set int ip address G 10.10.10.2/24
+$ctl_cpe_a show int address
+
+# --------------------------
+# vCPEB
+# --------------------------
+
+
+# ===========================
+# config SR 
+# ===========================
+
+# --------------------------
+# vRouterA
+# --------------------------
+echo_r "==== Config SR ===="
+
+echo_g "---- Config vRouterA SR----"
+
+echo_y "${ctl_A} sr localsid address fc10::1a behavior end.dx4 G1 10.10.10.2"
+$ctl_A sr localsid address fc10::1a behavior end.dx4 G1 10.10.10.2
+echo_y "${ctl_A} sr policy add bsid fe10::1a next fc01::1a"
+$ctl_A sr policy add bsid fe10::1a next fc01::1a
+echo_y "${ctl_A} sr steer l3 10.10.1.0/24 via bsid fe10::1a"
+$ctl_A show sr localsid
+
+# ----------------------------
+# vRouterB
+# ----------------------------
+echo_g "---- Config vRouterB SR ----"
+echo_y "${ctl_B} sr localsid address fc01::1a behavior end.dx4 G1 10.10.1.2"
+$ctl_B sr localsid address fc01::1a behavior end.dx4 G1 10.10.1.2
+echo_y "${ctl_B} sr policy add bsid fe01::1a next fc10::1a"
+$ctL_B sr policy add bsid fe01::1a next fc10::1a
+echo_y "${ctl_B} sr steer l3 10.10.10.0/24 via bsid fe01::1a"
+$ctl_B sr steer l3 10.10.10.0/24 via bsid fe01::1a
+$ctl_B show sr localsid
