@@ -42,8 +42,8 @@ $ctl_A set interface name memif10/0 G0
 $ctl_A show int
 
 echo_y "create memif socket for vRouterA-G1 and vCPEA-G"
-echo_g "${ctl_A} create memif socket id 9 filename /run/vpp/memif9_cpea_vroutera.sock"
-$ctl_A create memif socket id 9 filename /run/vpp/memif9_cpea_vroutera.sock
+echo_g "${ctl_A} create memif socket id 9 filename /run/vpp/memif9_vcpea_vroutera.sock"
+$ctl_A create memif socket id 9 filename /run/vpp/memif9_vcpea_vroutera.sock
 ls /run/vpp
 
 echo_g "${ctl_A} create interface memif id 1 socket-id 11 master"
@@ -150,7 +150,7 @@ $ctl_cpe_b show int
 
 echo_r "==== All vRouter start done! ===="
 
-if false;then
+#if false;then
 # ===========================
 # config ip 
 # ===========================
@@ -280,4 +280,4 @@ $ctl_B sr policy add bsid fe01::1a next fc10::1a
 echo_y "${ctl_B} sr steer l3 10.10.10.0/24 via bsid fe01::1a"
 $ctl_B sr steer l3 10.10.10.0/24 via bsid fe01::1a
 $ctl_B show sr localsid
-fi
+#fi
