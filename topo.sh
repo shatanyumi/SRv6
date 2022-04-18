@@ -362,6 +362,8 @@ $cpe1 set int state loop0 up
 echo_y "$cpe1 set int ip address loop0 fc01::1/96"
 $cpe1 set int ip address loop0 fc01::1/96
 $cpe1 show int addr
+echo_y "$cpe1 ip route add ::/0 via fdaa::2"
+$cpe1 ip route add ::/0 via fdaa::2
 echo_g "---- cpe1 ip config done ----"
 
 # cpe2 
@@ -380,6 +382,8 @@ $cpe2 set int state loop0 up
 echo_y "$cpe2 set int ip address loop0 fc07::1/96"
 $cpe2 set int ip address loop0 fc07::1/96
 $cpe2 show int addr
+echo_y "$cpe2 ip route add ::/0 via fdba::1"
+$cpe2 ip route add ::/0 via fdba::1
 echo_g "---- cpe2 ip config done ----"
 
 # router1
@@ -483,7 +487,7 @@ echo_g "---- router5 ip config done ----"
 echo_r "==== ip config done ===="
 
 # ip config test
-if true;then
+if false;then
 echo_r "==== ip config ping test ===="
 
 echo_g "host1 to cpe1"
@@ -537,4 +541,72 @@ fi
 # ====================
 echo_r "==== config sr ===="
 
+# router1
+echo_g "---- config router1 sr ----"
+echo_y "$router1 sr localsid address fc02::1a behavior end"
+$router1 sr localsid address fc02::1a behavior end
+$router1 show sr localsid
+echo_g "---- router1 sr config done ----"
+
+
+# router2
+echo_g "---- config router2 sr ----"
+echo_y "$router2 sr localsid address fc03::1a behavior end"
+$router2 sr localsid address fc03::1a behavior end
+$router2 show sr localsid
+echo_g "---- router2 sr config done ----"
+
+# router3
+echo_g "---- config router3 sr ----"
+echo_y "$router3 sr localsid address fc05::1a behavior end"
+$router3 sr localsid address fc05::1a behavior end
+$router3 show sr localsid
+echo_g "---- router3 sr config done ----"
+
+# router4
+echo_g "---- config router4 sr ----"
+echo_y "$router4 sr localsid address fc04::1a behavior end"
+$router4 sr localsid address fc04::1a behavior end
+$router4 show sr localsid
+echo_g "---- router1 sr config done ----"
+
+# router5
+echo_g "---- config router5 sr ----"
+echo_y "$router5 sr localsid address fc06::1a behavior end"
+$router5 sr localsid address fc06::1a behavior end
+$router5 show sr localsid
+echo_g "---- router1 sr config done ----"
+
+# cpe1
+echo_g "---- config cpe1 sr ----"
+echo_y "$cpe1 sr localsid address fc01::1a behavior end.dx4 left 10.10.2.2"
+$cpe1 sr localsid address fc01::1a behavior end.dx4 left 10.10.2.2
+echo_y "$cpe1 sr policy add bsid fe10::1a next fc02::1a next fc03::1a next fc05::1a next fc06::1a next fc07::1a"
+$cpe1 sr policy add bsid fe10::1a next fc02::1a next fc03::1a next fc05::1a next fc06::1a next fc07::1a
+echo_y "$cpe1 sr steer l3 10.10.2.0/24 via bsid fe10::1a"
+$cpe1 sr steer l3 10.10.2.0/24 via bsid fe10::1a
+echo_y "$cpe1 show sr localsid"
+$cpe1 show sr localsid
+echo_g "---- cpe1 config sr done ----"
+
+# cpe2
+echo_g "---- config cpe2 sr ----"
+echo_y "$cpe2 sr localsid address fc07::1a behavior end.dx4 right 10.10.1.2"
+$cpe2 sr localsid address fc07::1a behavior end.dx4 right 10.10.1.2
+echo_y "$cpe2 sr policy add bsid fe01::1a next fc06::1a next fc05::1a next fc04::1a next fc03::1a next fc02::1a next fc01::1a"
+$cpe2 sr policy add bsid fe01::1a next fc06::1a next fc05::1a next fc04::1a next fc03::1a next fc02::1a next fc01::1a
+echo_y "$cpe2 sr steer l3 10.10.1.0/24 via bsid fe01::1a"
+$cpe2 sr steer l3 10.10.1.0/24 via bsid fe01::1a
+echo_y "$cpe2 show sr localsid"
+$cpe2 show sr localsid
+echo_g "---- cpe2 config sr done ----"
+
 echo_r "==== sr config done ===="
+
+# =======================
+# sr test
+# =======================
+if true;then
+echo_g "sr ping test:"
+$host1 ping 10.10.1.2
+fi
