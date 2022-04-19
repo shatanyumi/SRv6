@@ -1,0 +1,56 @@
+{
+	"equipment": {
+		"host1": {
+			"G": "10.10.2.2/24"
+		},
+		"host2": {
+			"G": "10.10.1.2/24"
+		},
+		"cpe1": {
+			"left": "10.10.1.1/24",
+			"right": "fdaa::1/96",
+			"loop0": "fc01::1/96",
+			"localsid": "fc01::1a"
+		},
+		"cpe2": {
+			"left": "fdba::2/96",
+			"right": "10.10.1.1/24",
+			"loop0": "fc07::1/96",
+			"localsid": "fc07::1a"
+		},
+		"router1": {
+			"left1": "fdaa::2/96",
+			"right": "fdab::1/96",
+			"loop0": "fc02::1/96",
+			"localsid": "fc02::1a"
+		},
+		"router2": {
+			"left": "fdab::2/96",
+			"right1": "fdac::1/96",
+			"right2": "fdad::1/96",
+			"loop0": "fc03::1/96",
+			"localsid": "fc03::1a"
+		},
+		"router3": {
+			"left1": "fdac::2/96",
+			"left2": "fdae::1/96",
+			"right": "fdaf::1/96",
+			"loop0": "fc05::1/96",
+			"localsid": "fc05::1a"
+		},
+		"router4": {
+			"left": "fdad::2/96",
+			"right": "fdae::2/96",
+			"loop0": "fc04::1/96",
+			"localsid": "fc04::1a"
+		},
+		"router5": {
+			"left": "fdaf::2/96",
+			"right": "fdba::1/96",
+			"loop0": "fc06::1/96",
+			"localsid": "fc06::1a"
+		}
+	},
+	"speed": [1, 2, 3, 9, 3, 2, 7, 8, 9],
+	"rtt": [0.3, 0.5, 0.6, 0.7, 0.5, 0.4, 0.8, 0.2, 0.1]
+}
