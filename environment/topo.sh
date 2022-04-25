@@ -363,10 +363,8 @@ echo_y "$cpe1 set int ip address loop0 fc01::1/96"
 $cpe1 set int ip address loop0 fc01::1/96
 $cpe1 show int addr
 
-echo_y "$cpe1 ip route add 10.10.2.0/24 via fdaa::2"
-$cpe1 ip route add 10.10.2.0/24 via fdaa::2
-echo_y "$cpe1 ip route add fdaa::/96 via 10.10.2.2"
-$cpe1 ip route add fdaa::/96 via 10.10.2.2
+echo_y "$cpe1 ip route add ::/0 via fdaa::2"
+$cpe1 ip route add ::/0 via fdaa::2
 
 echo_g "---- cpe1 ip config done ----"
 
@@ -387,10 +385,8 @@ echo_y "$cpe2 set int ip address loop0 fc07::1/96"
 $cpe2 set int ip address loop0 fc07::1/96
 $cpe2 show int addr
 
-echo_y "$cpe2 ip route add 10.10.1.0/24 via fdba::1"
-$cpe2 ip route add 10.10.1.0/24 via fdba::1
-echo_y "$cpe2 ip route add fdba::/96 via 10.10.1.2"
-$cpe2 ip route add fdba::/96 via 10.10.1.2
+echo_y "$cpe2 ip route add ::/0 via fdba::1"
+$cpe2 ip route add ::/0 via fdba::1
 
 echo_g "---- cpe2 ip config done ----"
 
@@ -579,7 +575,7 @@ $host2 ping 10.10.1.1
 
 fi
 
-if false;then
+if true;then
 # ====================
 # config sr
 # ====================

@@ -281,3 +281,11 @@ echo_y "${ctl_B} sr steer l3 10.10.10.0/24 via bsid fe01::1a"
 $ctl_B sr steer l3 10.10.10.0/24 via bsid fe01::1a
 $ctl_B show sr localsid
 #fi
+
+# =======
+# test
+# =======
+echo_g "sr test: "
+$ctl_cpe_a ping 10.10.1.2
+$ctl_A show sr localsid
+$ctl_B show sr localsid
