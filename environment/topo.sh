@@ -407,10 +407,12 @@ echo_y "$router1 set int ip addr loop0 fc02::1/96"
 $router1 set int ip addr loop0 fc02::1/96
 $router1 show int addr
 
-echo_y "$router1 ip route add fdaa::/96 via fdab::2"
-$router1 ip route add fdaa::/96 via fdab::2
-echo_y "$router1 ip route add fdab::/96 via fdaa::1"
-$router1 ip route add fdab::/96 via fdaa::1
+echo_y "$router1 ip route add fdaa::1 via fdab::2"
+$router1 ip route add fdaa::1/96 via fdab::2
+echo_y "$router1 ip route add fdab::2 via fdaa::1"
+$router1 ip route add fdab::2/96 via fdaa::1
+
+$router1 show ip6 fib
 echo_g "---- router1 ip config done ----"
 
 # router2
@@ -433,15 +435,17 @@ echo_y "$router2 set int ip addr loop0 fc03::1/96"
 $router2 set int ip addr loop0 fc03::1/96
 $router2 show int addr
 
-echo_y "$router2 ip route add fdab::/96 via fdac::2"
-$router2 ip route add fdab::/96 via fdac::2
-echo_y "$router2 ip route add fdab::/96 via fdad::2"
-$router2 ip route add fdab::/96 via fdad::2
-echo_y "$router2 ip route add fdac::/96 via fdab::1"
-$router2 ip route add fdac::/96 via fdab::1
-echo_y "$router2 ip route add fdad::/96 via fdab::1"
-$router2 ip route add fdad::/96 via fdab::1
+echo_y "$router2 ip route add fdab::1 via fdac::2"
+$router2 ip route add fdab::1/96 via fdac::2
+echo_y "$router2 ip route add fdab::1 via fdad::2"
+$router2 ip route add fdab::1/96 via fdad::2
 
+echo_y "$router2 ip route add fdac::2 via fdab::1"
+$router2 ip route add fdac::2/96 via fdab::1
+echo_y "$router2 ip route add fdad::2 via fdab::1"
+$router2 ip route add fdad::2/96 via fdab::1
+
+$router2 show ip fib
 echo_g "---- router2 ip config done ----"
 
 # router3
@@ -465,15 +469,17 @@ echo_y "$router3 set int ip addr loop0 fc05::1/96"
 $router3 set int ip addr loop0 fc05::1/96
 $router3 show int addr
 
-echo_y "$router3 ip route add fdac::/96 via fdaf::2"
-$router3 ip route add fdac::/96 via fdaf::2
-echo_y "$router3 ip route add fdae::/96 via fdaf::2"
-$router3 ip route add fdae::/96 via fdaf::2
-echo_y "$router3 ip route add fdaf::/96 via fdac::1"
-$router3 ip route add fdaf::/96 via fdac::1
-echo_y "$router3 ip route add fdaf::/96 via fdae::2"
-$router3 ip route add fdaf::/96 via fdae::2
+echo_y "$router3 ip route add fdac::1 via fdaf::2"
+$router3 ip route add fdac::1/96 via fdaf::2
+echo_y "$router3 ip route add fdae::2 via fdaf::2"
+$router3 ip route add fdae::2/96 via fdaf::2
 
+echo_y "$router3 ip route add fdaf::2 via fdac::1"
+$router3 ip route add fdaf::2/96 via fdac::1
+echo_y "$router3 ip route add fdaf::2 via fdae::2"
+$router3 ip route add fdaf::2/96 via fdae::2
+
+$router3 show ip6 fib
 echo_g "---- router3 ip config done ----"
 
 # router4
@@ -493,12 +499,13 @@ echo_y "$router4 set int ip addr loop0 fc04::1/96"
 $router4 set int ip addr loop0 fc04::1/96
 $router4 show int addr
 
-echo_y "$router4 ip route add fdad::/96 via fdae::1"
-$router4 ip route add fdad::/96 via fdae::1
-echo_y "$router4 ip route add fdae::/96 via fdad::1"
-$router4 ip route add fdae::/96 via fdad::1
+echo_y "$router4 ip route add fdad::1 via fdae::1"
+$router4 ip route add fdad::1/96 via fdae::1
+echo_y "$router4 ip route add fdae::1 via fdad::1"
+$router4 ip route add fdae::1/96 via fdad::1
 echo_g "---- router4 ip config done ----"
 
+$router4 show ip6 fib
 # router5
 echo_g "---- config router5 ip ----"
 
@@ -516,10 +523,12 @@ echo_y "$router5 set int ip addr loop0 fc06::1/96"
 $router5 set int ip addr loop0 fc06::1/96
 $router5 show int addr
 
-echo_y "$router5 ip route add fdaf::/96 via fdba::2"
-$router5 ip route add fdaf::/96 via fdba::2
-echo_y "$router5 ip route add fdba::/96 via fdaf::1"
-$router5 ip route add fdba::/96 via fdaf::1
+echo_y "$router5 ip route add fdaf::1 via fdba::2"
+$router5 ip route add fdaf::1/96 via fdba::2
+echo_y "$router5 ip route add fdba::2 via fdaf::1"
+$router5 ip route add fdba::2/96 via fdaf::1
+
+$router5 show ip fib
 echo_g "---- router5 ip config done ----"
 
 echo_r "==== ip config done ===="
