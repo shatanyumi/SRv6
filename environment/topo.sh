@@ -435,17 +435,17 @@ echo_y "$router2 set int ip addr loop0 fc03::1/96"
 $router2 set int ip addr loop0 fc03::1/96
 $router2 show int addr
 
-echo_y "$router2 ip route add fdab::1 via fdac::2"
-$router2 ip route add fdab::1/96 via fdac::2
-echo_y "$router2 ip route add fdab::1 via fdad::2"
-$router2 ip route add fdab::1/96 via fdad::2
+# 多播
+echo_y "$router2 ip mroute add fdab::1/96 fdad::2/96 via right1 Forward"
+$router2 ip mroute add fdab::1/96 fdad::2/96 via right1 Forward
 
-echo_y "$router2 ip route add fdac::2 via fdab::1"
-$router2 ip route add fdac::2/96 via fdab::1
-echo_y "$router2 ip route add fdad::2 via fdab::1"
-$router2 ip route add fdad::2/96 via fdab::1
+echo_y "$router2 ip mroute add fdab::1/96 fdac::1/96 via right2 Forward"
+$router2 ip mroute add fdab::1/96 fdac::2/96 via right2 Forward
 
-$router2 show ip fib
+echo_y "$router2 ip mroute add fdac::2/96 fdad::2/96 via left Forward"
+$router2 ip mroute add fdac::2/96 fdad::2/96 via left Forward
+
+$router2 show ip6 mfib
 echo_g "---- router2 ip config done ----"
 
 # router3
@@ -469,17 +469,17 @@ echo_y "$router3 set int ip addr loop0 fc05::1/96"
 $router3 set int ip addr loop0 fc05::1/96
 $router3 show int addr
 
-echo_y "$router3 ip route add fdac::1 via fdaf::2"
-$router3 ip route add fdac::1/96 via fdaf::2
-echo_y "$router3 ip route add fdae::2 via fdaf::2"
-$router3 ip route add fdae::2/96 via fdaf::2
+# 多播
+echo_y "$router3 ip mroute add fdac::1/96 fdae::2/96 via right Forward"
+$router3 ip mroute add fdac::1/96 fdae::2/96 via right Forward
 
-echo_y "$router3 ip route add fdaf::2 via fdac::1"
-$router3 ip route add fdaf::2/96 via fdac::1
-echo_y "$router3 ip route add fdaf::2 via fdae::2"
-$router3 ip route add fdaf::2/96 via fdae::2
+echo_y "$router3 ip mroute add fdac::1/96 fdaf::2/96 via left2 Forward"
+$router3 ip mroute add fdac::1/96 fdaf::2/96 via left2 Forward
 
-$router3 show ip6 fib
+echo_y "$router3 ip mroute add fdaf::2/96 fdae::2/96 via left1 Forward"
+$router3 ip mroute add fdaf::2/96 fdae::2/96 via left1 Forward
+
+$router3 show ip6 mfib
 echo_g "---- router3 ip config done ----"
 
 # router4
@@ -534,7 +534,7 @@ echo_g "---- router5 ip config done ----"
 echo_r "==== ip config done ===="
 
 # ip config test
-if false;then
+if true;then
 echo_r "==== ip config ping test ===="
 
 echo_g "host1 to cpe1"
