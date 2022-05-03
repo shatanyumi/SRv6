@@ -407,12 +407,15 @@ echo_y "$router1 set int ip addr loop0 fc02::1/96"
 $router1 set int ip addr loop0 fc02::1/96
 $router1 show int addr
 
-echo_y "$router1 ip route add fdaa::1 via fdab::2"
-$router1 ip route add fdaa::1/96 via fdab::2
-echo_y "$router1 ip route add fdab::2 via fdaa::1"
-$router1 ip route add fdab::2/96 via fdaa::1
+#echo_y "$router1 ip route add fdaa::/96 via fdab::2"
+#$router1 ip route add fdaa::/96 via fdab::2
+#echo_y "$router1 ip route add fdab::/96 via fdaa::1"
+#$router1 ip route add fdab::/96 via fdaa::1
+# defautl route
+$router1 ip mroute add ::/0 via left1 Forward
+$router1 ip mroute add ::/0 via right Forward
 
-$router1 show ip6 fib
+$router1 show ip6 mfib
 echo_g "---- router1 ip config done ----"
 
 # router2
@@ -436,14 +439,22 @@ $router2 set int ip addr loop0 fc03::1/96
 $router2 show int addr
 
 # 多播
-echo_y "$router2 ip mroute add fdab::1/96 fdad::2/96 via right1 Forward"
-$router2 ip mroute add fdab::1/96 fdad::2/96 via right1 Forward
+#echo_y "$router2 ip mroute add fdab::/96 via right1 Forward"
+#$router2 ip mroute add fdab::/96 via right1 Forward
 
-echo_y "$router2 ip mroute add fdab::1/96 fdac::1/96 via right2 Forward"
-$router2 ip mroute add fdab::1/96 fdac::2/96 via right2 Forward
+#echo_y "$router2 ip mroute add fdab::/96 fdac::/96 via right2 Forward"
+#$router2 ip mroute add fdab::/96 via right2 Forward
 
-echo_y "$router2 ip mroute add fdac::2/96 fdad::2/96 via left Forward"
-$router2 ip mroute add fdac::2/96 fdad::2/96 via left Forward
+#echo_y "$router2 ip mroute add fdac::/96 via left Forward"
+#$router2 ip mroute add fdac::/96 via left Forward
+
+#echo_y "$router2 ip mroute add fdad::/96 via left Forward"
+#$router2 ip mroute add fdad::/96 via left Forward
+
+# default
+$router2 ip mroute add ::/via left Forward
+$router2 ip mroute add ::/via right1 Forward
+$router2 ip mroute add ::/via right2 Forward
 
 $router2 show ip6 mfib
 echo_g "---- router2 ip config done ----"
@@ -470,14 +481,22 @@ $router3 set int ip addr loop0 fc05::1/96
 $router3 show int addr
 
 # 多播
-echo_y "$router3 ip mroute add fdac::1/96 fdae::2/96 via right Forward"
-$router3 ip mroute add fdac::1/96 fdae::2/96 via right Forward
+#echo_y "$router3 ip mroute add fdac::/96 via right Forward"
+#$router3 ip mroute add fdac::/96 via right Forward
 
-echo_y "$router3 ip mroute add fdac::1/96 fdaf::2/96 via left2 Forward"
-$router3 ip mroute add fdac::1/96 fdaf::2/96 via left2 Forward
+#echo_y "$router3 ip mroute add fdae::/96 via right Forward"
+#$router3 ip mroute add fdae::/96 via right Forward
 
-echo_y "$router3 ip mroute add fdaf::2/96 fdae::2/96 via left1 Forward"
-$router3 ip mroute add fdaf::2/96 fdae::2/96 via left1 Forward
+#echo_y "$router3 ip mroute add fdaf::/96 via left2 Forward"
+#$router3 ip mroute add fdaf::/96 via left2 Forward
+
+#echo_y "$router3 ip mroute add fdaf::/96 via left1 Forward"
+#$router3 ip mroute add fdaf::/96 via left1 Forward
+
+# default
+$router3 ip mroute add ::/via left1 Forward
+$router3 ip mroute add ::/via left2 Forward
+$router3 ip mroute add ::/via right Forward
 
 $router3 show ip6 mfib
 echo_g "---- router3 ip config done ----"
@@ -499,13 +518,18 @@ echo_y "$router4 set int ip addr loop0 fc04::1/96"
 $router4 set int ip addr loop0 fc04::1/96
 $router4 show int addr
 
-echo_y "$router4 ip route add fdad::1 via fdae::1"
-$router4 ip route add fdad::1/96 via fdae::1
-echo_y "$router4 ip route add fdae::1 via fdad::1"
-$router4 ip route add fdae::1/96 via fdad::1
+#echo_y "$router4 ip route add fdad::1 via fdae::1"
+#$router4 ip route add fdad::1/96 via fdae::1
+#echo_y "$router4 ip route add fdae::1 via fdad::1"
+#$router4 ip route add fdae::1/96 via fdad::1
+
+# default
+$router4 ip mroute add ::/via left Forward
+$router4 ip mroute add ::/via right Forward
+
 echo_g "---- router4 ip config done ----"
 
-$router4 show ip6 fib
+$router4 show ip6 mfib
 # router5
 echo_g "---- config router5 ip ----"
 
@@ -523,18 +547,22 @@ echo_y "$router5 set int ip addr loop0 fc06::1/96"
 $router5 set int ip addr loop0 fc06::1/96
 $router5 show int addr
 
-echo_y "$router5 ip route add fdaf::1 via fdba::2"
-$router5 ip route add fdaf::1/96 via fdba::2
-echo_y "$router5 ip route add fdba::2 via fdaf::1"
-$router5 ip route add fdba::2/96 via fdaf::1
+#echo_y "$router5 ip route add fdaf::1 via fdba::2"
+#$router5 ip route add fdaf::1/96 via fdba::2
+#echo_y "$router5 ip route add fdba::2 via fdaf::1"
+#$router5 ip route add fdba::2/96 via fdaf::1
 
-$router5 show ip fib
+# default
+$router4 ip mroute add ::/via left Forward
+$router4 ip mroute add ::/via right Forward
+
+$router5 show ip6 mfib
 echo_g "---- router5 ip config done ----"
 
 echo_r "==== ip config done ===="
 
 # ip config test
-if true;then
+if false;then
 echo_r "==== ip config ping test ===="
 
 echo_g "host1 to cpe1"
@@ -592,37 +620,57 @@ echo_r "==== config sr ===="
 
 # router1
 echo_g "---- config router1 sr ----"
-echo_y "$router1 sr localsid address fc02::1a behavior end"
-$router1 sr localsid address fc02::1a behavior end
+echo_y "$router1 sr localsid address fc02::1a behavior end.x right fdab::2"
+$router1 sr localsid address fc02::1a behavior end.x right fdab::2
+
+echo_y "$router1 sr localsid address fc02::1b behavior end.x left fdaa::1"
+$router1 sr localsid address fc02::1b behavior end.x left1 fdaa::1
+
 $router1 show sr localsid
 echo_g "---- router1 sr config done ----"
 
 
 # router2
 echo_g "---- config router2 sr ----"
-echo_y "$router2 sr localsid address fc03::1a behavior end"
-$router2 sr localsid address fc03::1a behavior end
+echo_y "$router2 sr localsid address fc03::1a behavior end.x right1 fdac::2 "
+$router2 sr localsid address fc03::1a behavior end.x right1 fdac::2
+
+echo_y "$router2 sr localsid address fc03::1b behavior end.x left fdaa::1"
+$router2 sr localsid address fc03::1b behavior end.x left fdab::1
+
 $router2 show sr localsid
 echo_g "---- router2 sr config done ----"
 
 # router3
 echo_g "---- config router3 sr ----"
-echo_y "$router3 sr localsid address fc05::1a behavior end"
-$router3 sr localsid address fc05::1a behavior end
+echo_y "$router3 sr localsid address fc05::1a behavior end.x right fdaf::2"
+$router3 sr localsid address fc05::1a behavior end.x right fdaf::2
+
+echo_y "$router3 sr localsid address fc05::1b behavior end.x left1 fdac::1"
+$router3 sr localsid address fc05::1b behavior end.x left1 fdac::1
+
 $router3 show sr localsid
 echo_g "---- router3 sr config done ----"
 
 # router4
 echo_g "---- config router4 sr ----"
-echo_y "$router4 sr localsid address fc04::1a behavior end"
-$router4 sr localsid address fc04::1a behavior end
+echo_y "$router4 sr localsid address fc04::1a behavior end.x right fdae::1"
+$router4 sr localsid address fc04::1a behavior end.x right fdae::1
+
+echo_y "$router4 sr localsid address fc04::1b behavior end.x left fdad::1"
+$router4 sr localsid address fc04::1b behavior end.x left fdad::1
+
 $router4 show sr localsid
 echo_g "---- router1 sr config done ----"
 
 # router5
 echo_g "---- config router5 sr ----"
-echo_y "$router5 sr localsid address fc06::1a behavior end"
-$router5 sr localsid address fc06::1a behavior end
+echo_y "$router5 sr localsid address fc06::1a behavior end.x right fdba::2"
+$router5 sr localsid address fc06::1a behavior end.x right fdba::2
+
+echo_y "$router5 sr localsid address fc06::1b behavior end.x left fdbf::1"
+$router5 sr localsid address fc06::1b behavior end.x left fdaf::1
+
 $router5 show sr localsid
 echo_g "---- router1 sr config done ----"
 
@@ -630,10 +678,10 @@ echo_g "---- router1 sr config done ----"
 echo_g "---- config cpe1 sr ----"
 echo_y "$cpe1 sr localsid address fc01::1a behavior end.dx4 left 10.10.2.2"
 $cpe1 sr localsid address fc01::1a behavior end.dx4 left 10.10.2.2
-echo_y "$cpe1 sr policy add bsid fe10::1a next fc02::1a next fc03::1a next fc05::1a next fc06::1a next fc07::1a encap"
-$cpe1 sr policy add bsid fe10::1a next fc02::1a next fc03::1a next fc05::1a next fc06::1a next fc07::1a encap
-echo_y "$cpe1 sr steer l3 10.10.2.0/24 via bsid fe10::1a"
-$cpe1 sr steer l3 10.10.2.0/24 via bsid fe10::1a
+echo_y "$cpe1 sr policy add bsid fe10::1a next fc02::1a next fc03::1a next fc05::1a next fc06::1a next fc07::1a"
+$cpe1 sr policy add bsid fe10::1a next fc02::1a next fc03::1a next fc05::1a next fc06::1a next fc07::1a
+echo_y "$cpe1 sr steer l3 10.10.1.0/24 via bsid fe10::1a"
+$cpe1 sr steer l3 10.10.1.0/24 via bsid fe10::1a
 echo_y "$cpe1 show sr localsid"
 $cpe1 show sr localsid
 echo_g "---- cpe1 config sr done ----"
@@ -642,10 +690,10 @@ echo_g "---- cpe1 config sr done ----"
 echo_g "---- config cpe2 sr ----"
 echo_y "$cpe2 sr localsid address fc07::1a behavior end.dx4 right 10.10.1.2"
 $cpe2 sr localsid address fc07::1a behavior end.dx4 right 10.10.1.2
-echo_y "$cpe2 sr policy add bsid fe01::1a next fc06::1a next fc05::1a next fc04::1a next fc03::1a next fc02::1a next fc01::1a encap"
-$cpe2 sr policy add bsid fe01::1a next fc06::1a next fc05::1a next fc04::1a next fc03::1a next fc02::1a next fc01::1a encap
-echo_y "$cpe2 sr steer l3 10.10.1.0/24 via bsid fe01::1a"
-$cpe2 sr steer l3 10.10.1.0/24 via bsid fe01::1a
+echo_y "$cpe2 sr policy add bsid fe01::1a next fc06::1a next fc05::1a next fc03::1a next fc02::1a next fc01::1a"
+$cpe2 sr policy add bsid fe01::1a next fc06::1b next fc05::1b next fc03::1b next fc02::1b next fc01::1a
+echo_y "$cpe2 sr steer l3 10.10.2.0/24 via bsid fe01::1a"
+$cpe2 sr steer l3 10.10.2.0/24 via bsid fe01::1a
 echo_y "$cpe2 show sr localsid"
 $cpe2 show sr localsid
 echo_g "---- cpe2 config sr done ----"
@@ -659,4 +707,5 @@ fi
 if true;then
 echo_g "sr ping test:"
 $host1 ping 10.10.1.2
+$cpe1 show sr localsid
 fi
